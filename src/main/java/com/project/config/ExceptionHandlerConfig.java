@@ -1,5 +1,8 @@
 package com.project.config;
 
+import com.project.exception.ConcertException;
+import com.project.exception.PrenotationException;
+import com.project.exception.TicketException;
 import com.project.exception.UserException;
 import com.project.model.enums.ErrorCode;
 import com.project.response.ErrorResponse;
@@ -32,6 +35,26 @@ public class ExceptionHandlerConfig {
 
     private static final Logger log = LoggerFactory.getLogger(ExceptionHandlerConfig.class);
 
+    @ExceptionHandler(PrenotationException.class)
+    public ResponseEntity<ErrorResponse> handleFlightException(PrenotationException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getResponse().getErrorCode(), e.getMessage());
+        logStacktrace(errorResponse, e);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
+    @ExceptionHandler(ConcertException.class)
+    public ResponseEntity<ErrorResponse> handleConcertException(ConcertException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getResponse().getErrorCode(), e.getMessage());
+        logStacktrace(errorResponse, e);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
+    @ExceptionHandler(TicketException.class)
+    public ResponseEntity<ErrorResponse> handleTicketException(TicketException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getResponse().getErrorCode(), e.getMessage());
+        logStacktrace(errorResponse, e);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
 
     @ExceptionHandler({UserException.class, InternalAuthenticationServiceException.class})
     public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
