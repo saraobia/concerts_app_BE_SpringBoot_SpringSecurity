@@ -20,24 +20,25 @@ public class TicketService implements TicketFunctions {
 
     @Autowired
     private TicketRepository ticketRepository;
-/*
+
     @Override
-    public boolean updatedTicketsQuantity(Integer idConcert, int qta) {
+    public TicketDTO updatedTicketsQuantity(Integer idConcert, int qta) {
         Ticket ticket = ticketRepository.findByIdConcert(idConcert)
                 .orElseThrow(() -> new TicketException(
                         new ErrorResponse(ErrorCode.TNF, "Ticket not found with idConcert: " + idConcert)));
 
         if (ticket.getAvailableQta() < qta) {
             throw new TicketException(
-                  new ErrorResponse(ErrorCode.ITQ, "Invalid ticket quantity for concert: " + idConcert));
+                    new ErrorResponse(ErrorCode.ITQ, "Invalid ticket quantity for concert: " + idConcert));
         }
 
         ticket.setAvailableQta(ticket.getAvailableQta() - qta);
         ticketRepository.save(ticket);
 
-        return true;
-    } */
-    //TODO: MOVE
+        return convertToTicketDTO(ticket);
+    }
+
+
     private TicketDTO convertToTicketDTO(Ticket ticket) {
         return TicketDTO.builder()
                 .id(ticket.getId())
@@ -45,8 +46,11 @@ public class TicketService implements TicketFunctions {
                 .build();
     }
 
+    /*
     @Override
     public boolean updatedTicketsQuantity(Integer idConcert, int qta) {
         return false;
-    }
+    }*/
 }
+
+

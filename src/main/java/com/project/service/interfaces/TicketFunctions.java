@@ -6,5 +6,5 @@ import com.project.model.dto.TicketDTO;
 import java.util.Optional;
 
 public interface TicketFunctions {
-    boolean updatedTicketsQuantity(Integer idConcert, int qta);
+    TicketDTO updatedTicketsQuantity(Integer idConcert, int qta);
 }

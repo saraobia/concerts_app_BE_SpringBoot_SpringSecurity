@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.model.dto.TicketDTO;
 import com.project.model.dto.UserDTO;
 import com.project.response.SuccessResponse;
 import com.project.service.TicketService;
@@ -13,17 +14,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-    /*
+
     @Autowired
     private TicketService ticketService;
 
-    @PatchMapping("/")
-    public ResponseEntity<SuccessResponse<Boolean>> updateTicketsQta(@PathVariable Integer idConcert,
-                                                                     @PathVariable int qta,
-                                                                     HttpServletRequest request){
-        boolean updatedSuccessfully = ticketService.updatedTicketsQuantity(idConcert, qta);
-        return updatedSuccessfully
-                ? new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.OK)
-                : new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.BAD_REQUEST);
-    }*/
+    @PatchMapping("/{idConcert}/{qta}")
+    public ResponseEntity<SuccessResponse<TicketDTO>> updateTicketsQta(@PathVariable Integer idConcert,
+                                                                       @PathVariable int qta,
+                                                                       HttpServletRequest request){
+        TicketDTO ticketDTO = ticketService.updatedTicketsQuantity(idConcert, qta);
+        return  new ResponseEntity<>(new SuccessResponse<>(ticketDTO), HttpStatus.OK);
+    }
 }
