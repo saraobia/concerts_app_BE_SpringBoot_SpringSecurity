@@ -30,8 +30,8 @@ public class SwaggerConfig {
                    )
 
             ).info(new Info()
-                   .title("Super Security API")
-                   .description("API Rest for testing security")
+                   .title("Api for buy tickets")
+                   .description("API Rest for base tickets service")
                    .version("1.0"));
     }
 }
