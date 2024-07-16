@@ -43,6 +43,9 @@ public class Concert implements Serializable {
     private BigDecimal price;
 
     // One-to-many relationship with Ticket entity: a flight can have multiple tickets
-    @OneToMany(mappedBy = "concert", fetch = FetchType.LAZY)
-    private List<Ticket> tickets;
+   /* @OneToMany(mappedBy = "concert", fetch = FetchType.LAZY)
+    private List<Ticket> tickets;*/
+
+    @OneToOne(mappedBy = "concert", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Ticket ticket;
 }

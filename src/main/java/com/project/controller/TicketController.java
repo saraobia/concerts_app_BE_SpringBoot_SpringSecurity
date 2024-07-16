@@ -2,20 +2,28 @@ package com.project.controller;
 
 import com.project.model.dto.UserDTO;
 import com.project.response.SuccessResponse;
+import com.project.service.TicketService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-    @GetMapping("/")
-    public ResponseEntity<SuccessResponse<UserDTO>> getTickets(HttpServletRequest request){
-        return new ResponseEntity<>(HttpStatus.OK);
-       // return new ResponseEntity<>(new SuccessResponse<>(customUserDetailsService.loadUser(request)), HttpStatus.OK);
-    }
+    /*
+    @Autowired
+    private TicketService ticketService;
+
+    @PatchMapping("/")
+    public ResponseEntity<SuccessResponse<Boolean>> updateTicketsQta(@PathVariable Integer idConcert,
+                                                                     @PathVariable int qta,
+                                                                     HttpServletRequest request){
+        boolean updatedSuccessfully = ticketService.updatedTicketsQuantity(idConcert, qta);
+        return updatedSuccessfully
+                ? new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.OK)
+                : new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.BAD_REQUEST);
+    }*/
 }
