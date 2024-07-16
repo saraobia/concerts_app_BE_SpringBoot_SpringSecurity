@@ -11,6 +11,7 @@ import com.project.service.interfaces.ConcertFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class ConcertService implements ConcertFunctions {
         return true;
     }
 
-    private ConcertDTO convertToConcertDTO(Concert concert) {
+    public ConcertDTO convertToConcertDTO(Concert concert) {
         return ConcertDTO.builder()
                 .id(concert.getId())
                 .city(concert.getCity())
@@ -62,7 +63,7 @@ public class ConcertService implements ConcertFunctions {
                 .reply(concert.getReply())
                 .availablePlace(concert.getAvailablePlace())
                 .date(concert.getDate())
-                .price(concert.getPrice())
+                .price(new BigDecimal(String.valueOf(concert.getPrice())))
                 .build();
     }
 }

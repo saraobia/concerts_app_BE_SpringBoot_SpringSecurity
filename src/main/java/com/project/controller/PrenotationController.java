@@ -2,6 +2,7 @@ package com.project.controller;
 
 import com.project.model.PaymentRequest;
 import com.project.model.dto.PrenotationDTO;
+import com.project.model.dto.PrenotationWithTicketsDTO;
 import com.project.model.dto.UserDTO;
 import com.project.response.SuccessResponse;
 import com.project.service.PrenotationService;
@@ -21,8 +22,8 @@ public class PrenotationController {
     private PrenotationService prenotationService;
 
     @GetMapping("/user/{idUser}")
-    public ResponseEntity<SuccessResponse<List<PrenotationDTO>>> getPrenotations(@PathVariable Integer idUser,
-                                                                                 HttpServletRequest request){
+    public ResponseEntity<SuccessResponse<List<PrenotationWithTicketsDTO>>> getPrenotations(@PathVariable Integer idUser,
+                                                                                            HttpServletRequest request){
         return new ResponseEntity<>(new SuccessResponse<>(prenotationService.viewClientPrenotations(idUser)), HttpStatus.OK);
     }
 

@@ -16,4 +16,5 @@ public class TicketDTO {
 
     private Integer id;
     private int availableQta;
+    private ConcertDTO concert;
 }

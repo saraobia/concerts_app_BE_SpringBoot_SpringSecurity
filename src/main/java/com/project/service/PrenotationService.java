@@ -8,7 +8,9 @@ import com.project.model.Concert;
 import com.project.model.Prenotation;
 import com.project.model.Ticket;
 import com.project.model.User;
+import com.project.model.dto.ConcertDTO;
 import com.project.model.dto.PrenotationDTO;
+import com.project.model.dto.PrenotationWithTicketsDTO;
 import com.project.model.dto.TicketDTO;
 import com.project.model.enums.ErrorCode;
 import com.project.model.enums.PaymentType;
@@ -45,57 +47,63 @@ public class PrenotationService implements PrenotationFunctions {
     @Autowired
     private TicketService ticketService;
 
+    @Autowired
+    private ConcertService concertService;
+
     @Override
     public boolean createAndConfirmPrenotation(Integer idUser, Integer idConcert, int qta, PaymentType paymentType) {
-       //VERIFY CONCERT
+        // VERIFY CONCERT
         Concert concert = concertRepository.findById(idConcert)
-                        .orElseThrow(()-> new ConcertException(
+                .orElseThrow(() -> new ConcertException(
                         new ErrorResponse(ErrorCode.CNF, "Concert not found with id: " + idConcert)));
 
-        //VERIFY USER
+        // VERIFY USER
         User user = userRepository.findById(idUser)
-                    .orElseThrow(()-> new UserException(
-                    new ErrorResponse(ErrorCode.EUN, "User not found with id: " + idUser)));
+                .orElseThrow(() -> new UserException(
+                        new ErrorResponse(ErrorCode.EUN, "User not found with id: " + idUser)));
 
-        //FIND TICKET REFERENCE AND UPDATE QTA
-        TicketDTO ticketDTO = ticketService.updatedTicketsQuantity(idConcert, qta);
-        Integer idTicket = ticketDTO.getId();
+        // FIND OR CREATE PRENOTATION
+        Prenotation prenotation = prenotationRepository.findByUserIdAndConcertId(idUser, idConcert)
+                .orElseGet(() -> {
+                    Prenotation newPrenotation = new Prenotation();
+                    newPrenotation.setUser(user);
+                    newPrenotation.setQta(0);
+                    newPrenotation.setPaymentType(paymentType);
+                    return newPrenotation;
+                });
 
-        Ticket ticket = ticketRepository.findById(idTicket)
-                .orElseThrow(()-> new TicketException(
-                new ErrorResponse(ErrorCode.TNF, "Ticket not found with id: " + idTicket)));
+        // UPDATE PRENOTATION
+        prenotation.setQta(prenotation.getQta() + qta);
+        prenotation.setTotalPrice(concert.getPrice().multiply(BigDecimal.valueOf(prenotation.getQta())));
 
+        // FIND TICKET REFERENCE AND UPDATE QTA
+        Ticket ticket = ticketRepository.findByIdConcert(idConcert)
+                .orElseThrow(() -> new TicketException(
+                        new ErrorResponse(ErrorCode.TNF, "Ticket not found for concert with id: " + idConcert)));
 
-        BigDecimal convertQta = new BigDecimal(qta);
-        Optional<Prenotation> optPrenotation = prenotationRepository.findByUserIdAndTicketId(idConcert, idTicket);
-        if(optPrenotation.isPresent()) {
-            Prenotation existingPrenotation = optPrenotation.get();
-            addTicketsToExistingPrenotation(existingPrenotation.getId(), qta);
-            existingPrenotation.setTotalPrice(existingPrenotation.getTotalPrice().add(concert.getPrice().multiply(convertQta)));
-            prenotationRepository.save(existingPrenotation);
+        if (ticket.getAvailableQta() < qta) {
+            throw new TicketException(new ErrorResponse(ErrorCode.ITQ, "Insufficient tickets available"));
         }
 
-        Prenotation prenotation = new Prenotation();
-        prenotation.setUser(user);
-        prenotation.setQta(qta);
-        prenotation.setTicket(ticket);
-        prenotation.setTotalPrice(concert.getPrice().multiply(convertQta));
+        ticket.setAvailableQta(ticket.getAvailableQta() - qta);
+        ticketRepository.save(ticket);
 
+        prenotation.setTicket(ticket);
         prenotationRepository.save(prenotation);
 
         return true;
     }
 
     @Override
-    public List<PrenotationDTO> viewClientPrenotations(Integer idUser) {
+    public List<PrenotationWithTicketsDTO> viewClientPrenotations(Integer idUser) {
         List<Prenotation> prenotations = prenotationRepository.findAllByUserId(idUser);
         if (prenotations.isEmpty())
             throw new PrenotationException(
                     new ErrorResponse(ErrorCode.NUP, "No prenotation for user with id: " + idUser));
 
         return prenotations.stream()
-                            .map(this::convertToPrenotationDTO)
-                            .collect(Collectors.toList());
+                .map(this::convertToPrenotationWithTicketsDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -127,5 +135,28 @@ public class PrenotationService implements PrenotationFunctions {
                 .qta(prenotation.getQta())
                 .totalPrice(prenotation.getTotalPrice())
                 .build();
+    }
+
+    private PrenotationWithTicketsDTO convertToPrenotationWithTicketsDTO(Prenotation prenotation) {
+        return PrenotationWithTicketsDTO.builder()
+                .id(prenotation.getId())
+                .paymentType(prenotation.getPaymentType())
+                .qta(prenotation.getQta())
+                .totalPrice(prenotation.getTotalPrice())
+                .ticket(convertToTicketDTO(prenotation.getTicket()))
+                .build();
+    }
+
+    private TicketDTO convertToTicketDTO(Ticket ticket) {
+        return TicketDTO.builder()
+                .id(ticket.getId())
+                .concert(convertToConcertDTO(ticket.getConcert()))
+                .availableQta(ticket.getAvailableQta())
+                .build();
+    }
+
+
+    private ConcertDTO convertToConcertDTO(Concert concert) {
+        return concertService.convertToConcertDTO(concert);
     }
 }

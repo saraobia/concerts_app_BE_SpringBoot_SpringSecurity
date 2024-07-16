@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PrenotationDTO {
+public class PrenotationWithTicketsDTO {
 
     private Integer id;
     private int qta;
@@ -23,5 +23,6 @@ public class PrenotationDTO {
     @JsonProperty("total_price")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal totalPrice;
+    private TicketDTO ticket;
 
 }

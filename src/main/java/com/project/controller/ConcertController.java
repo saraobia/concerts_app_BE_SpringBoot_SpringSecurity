@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -39,5 +41,20 @@ public class ConcertController {
         return updatedSuccessfully
                ? new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.OK)
                : new ResponseEntity<>(new SuccessResponse<>(updatedSuccessfully), HttpStatus.BAD_REQUEST);
+    }
+
+    // Endpoint di test
+    @GetMapping("/test")
+    public ConcertDTO testBigDecimal() {
+        ConcertDTO dto = ConcertDTO.builder()
+                .id(10)
+                .city("Test City")
+                .band("Test Band")
+                .reply("Test Reply")
+                .availablePlace(100)
+                .date(LocalDate.now())
+                .price(new BigDecimal("123.45"))
+                .build();
+        return dto;
     }
 }

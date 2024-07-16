@@ -22,11 +22,6 @@ public class Ticket implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    // Many-to-one relationship with Flight entity: many tickets for single flight
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_concert")
-    private Concert concert;*/
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_concert")
     private Concert concert;

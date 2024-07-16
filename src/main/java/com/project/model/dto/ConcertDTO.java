@@ -1,5 +1,7 @@
 package com.project.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +22,8 @@ public class ConcertDTO {
     private String reply;
     private int availablePlace;
     private LocalDate date;
+
+    @JsonProperty("price")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
 }

@@ -13,8 +13,8 @@ import java.util.Optional;
 @Repository
 public interface PrenotationRepository extends JpaRepository<Prenotation, Integer> {
 
-    @Query("SELECT p FROM Prenotation p WHERE p.user.id = :idUser AND p.ticket.id = :idTicket")
-    Optional<Prenotation> findByUserIdAndTicketId(@Param("idUser") Integer idUser, @Param("idTicket") int idTicket);
+    @Query("SELECT p FROM Prenotation p WHERE p.user.id = :idUser AND p.ticket.concert.id = :idConcert")
+    Optional<Prenotation> findByUserIdAndConcertId(@Param("idUser") Integer idUser, @Param("idConcert") Integer idConcert);
 
     @Query("SELECT p FROM Prenotation p WHERE p.user.id = :idUser")
     List<Prenotation> findAllByUserId(@Param("idUser") Integer idUser);
