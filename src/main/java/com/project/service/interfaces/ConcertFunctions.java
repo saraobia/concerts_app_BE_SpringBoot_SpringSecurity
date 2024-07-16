@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ConcertFunctions {
     List<ConcertDTO> viewAvailableConcertsFromNow();
-    Optional<Concert> getConcert(Integer idConcert);
-    Optional<Concert> updateAvailablePlaceAfterPrenotation(Integer idConcert, int qta);
+    ConcertDTO getConcert(Integer idConcert);
+    boolean updateAvailablePlaceAfterPrenotation(Integer idConcert, int qta);
 }
