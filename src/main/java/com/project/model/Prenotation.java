@@ -1,7 +1,6 @@
 package com.project.model;
 
 import com.project.model.enums.PaymentType;
-import com.project.model.enums.State;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,9 +34,6 @@ public class Prenotation {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
-    @Column (name = "state")
-    @Enumerated(EnumType.STRING)
-    private State state;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;

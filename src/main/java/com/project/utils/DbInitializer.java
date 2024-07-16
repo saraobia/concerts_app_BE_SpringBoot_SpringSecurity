@@ -88,6 +88,7 @@ public class DbInitializer implements CommandLineRunner {
                     .city("New York")
                     .band("The Rolling Stones")
                     .reply("Madison Square Garden")
+                    .availablePlace(1000)
                     .date(LocalDate.of(2024, 8, 15))
                     .price(new BigDecimal("150.00"))
                     .build();
@@ -97,6 +98,7 @@ public class DbInitializer implements CommandLineRunner {
                     .city("Los Angeles")
                     .band("Coldplay")
                     .reply("SoFi Stadium")
+                    .availablePlace(1500)
                     .date(LocalDate.of(2024, 9, 20))
                     .price(new BigDecimal("120.00"))
                     .build();
@@ -132,7 +134,6 @@ public class DbInitializer implements CommandLineRunner {
                         .user(users.get(0))
                         .qta(2)
                         .paymentType(PaymentType.CREDIT_CARD)
-                        .state(State.CONFIRMED)
                         .totalPrice(new BigDecimal("300.00"))
                         .ticket(tickets.get(0))
                         .build();
@@ -142,7 +143,6 @@ public class DbInitializer implements CommandLineRunner {
                         .user(users.get(1))
                         .qta(3)
                         .paymentType(PaymentType.PAYPAL)
-                        .state(State.ANNULLED)
                         .totalPrice(new BigDecimal("360.00"))
                         .ticket(tickets.get(1))
                         .build();

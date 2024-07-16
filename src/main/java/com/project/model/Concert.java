@@ -33,6 +33,9 @@ public class Concert implements Serializable {
     @Column(name = "reply")
     private String reply;
 
+    @Column(name = "available_place")
+    private int availablePlace;
+
     @Column(name = "date")
     private LocalDate date;
 
