@@ -20,7 +20,7 @@ public class PrenotationWithTicketsDTO {
     private int qta;
     private PaymentType paymentType;
 
-    @JsonProperty("total_price")
+    @JsonProperty("totalPrice")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal totalPrice;
     private TicketDTO ticket;
